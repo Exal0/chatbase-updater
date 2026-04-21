@@ -9,7 +9,6 @@ app.use(express.json());
 // ⚙️ CONFIG
 const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
 const SHOP_URL = 'https://www.exalto-professional-shop.com';
-const CATEGORIES_AUTORISEES = [4, 5, 6, 7, 11, 12, 13];
 
 // Config axios
 const api = axios.create({
@@ -33,11 +32,6 @@ app.get('/produits', async (req, res) => {
     });
 
     let products = prodRes.data.products;
-
-    // Filtre par catégories
-    products = products.filter(p =>
-      CATEGORIES_AUTORISEES.includes(parseInt(p.id_category_default))
-    );
 
     // Filtre par nom OU description si recherche
     if (recherche) {
