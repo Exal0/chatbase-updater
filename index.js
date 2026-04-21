@@ -27,7 +27,7 @@ app.get('/produits', async (req, res) => {
     const prodRes = await api.get('/products', {
       params: {
         output_format: 'JSON',
-        display: '[id,name,price,description_short,active,id_default_image,link_rewrite,id_category_default]',
+        display: '[id,name,price,description_short,description,active,id_default_image,link_rewrite,id_category_default]',
         filter: { active: 1 }
       }
     });
@@ -43,7 +43,8 @@ app.get('/produits', async (req, res) => {
     if (recherche) {
       products = products.filter(p =>
         p.name[0]?.value?.toLowerCase().includes(recherche) ||
-        p.description_short[0]?.value?.toLowerCase().includes(recherche)
+        p.description_short[0]?.value?.toLowerCase().includes(recherche) ||
+        p.description[0]?.value?.toLowerCase().includes(recherche)
       );
     }
 
@@ -53,8 +54,9 @@ app.get('/produits', async (req, res) => {
       const nom = product.name[0]?.value || '';
       const prix = parseFloat(product.price).toFixed(2);
       const slug = product.link_rewrite[0]?.value || '';
-      const description = product.description_short[0]?.value
-        ?.replace(/<[^>]*>/g, '').trim() || '';
+      const description =
+        product.description_short[0]?.value?.replace(/<[^>]*>/g, '').trim() ||
+        product.description[0]?.value?.replace(/<[^>]*>/g, '').trim() || '';
       const imageUrl = `${SHOP_URL}/${product.id_default_image}-large_default/${id}.jpg`;
       const lien = `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`;
 
