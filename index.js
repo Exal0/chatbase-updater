@@ -18,7 +18,7 @@ const api = axios.create({
 });
 
 // Route que Chatbase va appeler
-app.get('/produits', async (req, res) => {
+app.get('/produits/all', async (req, res) => {
   try {
     const recherche = req.query.nom?.toLowerCase() || '';
 
