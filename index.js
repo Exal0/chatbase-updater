@@ -19,18 +19,9 @@ const api = axios.create({
 });
 
 // Route que Chatbase va appeler
-// On utilise app.all pour accepter GET (navigateur) et POST (Chatbase)
-app.all('/produits', async (req, res) => {
+app.get('/produits', async (req, res) => {
   try {
-    // Va chercher le paramètre "nom" peu importe comment Chatbase l'envoie
-    const recherche = req.query.nom?.toLowerCase() || req.body.nom?.toLowerCase() || '';
-
-    // SÉCURITÉ ANTI-PLANTAGE : Si la recherche est vide, on arrête tout de suite
-    if (!recherche) {
-      return res.json({ 
-        erreur: "Il manque le nom du produit. Demande à l'utilisateur de préciser sa recherche." 
-      });
-    }
+    const recherche = req.query.nom?.toLowerCase() || '';
 
     // Récupère les produits
     const prodRes = await api.get('/products', {
@@ -48,19 +39,16 @@ app.all('/produits', async (req, res) => {
       CATEGORIES_AUTORISEES.includes(parseInt(p.id_category_default))
     );
 
-    // Filtre par nom OU description
-    products = products.filter(p =>
-      p.name[0]?.value?.toLowerCase().includes(recherche) ||
-      p.description_short[0]?.value?.toLowerCase().includes(recherche) ||
-      p.description[0]?.value?.toLowerCase().includes(recherche)
-    );
-
-    // Sécurité 2 : Si la recherche ne trouve rien, on renvoie une réponse vide propre
-    if (products.length === 0) {
-        return res.json({ produits: [], message: "Aucun produit trouvé pour ce nom." });
+    // Filtre par nom OU description si recherche
+    if (recherche) {
+      products = products.filter(p =>
+        p.name[0]?.value?.toLowerCase().includes(recherche) ||
+        p.description_short[0]?.value?.toLowerCase().includes(recherche) ||
+        p.description[0]?.value?.toLowerCase().includes(recherche)
+      );
     }
 
-    // Récupère le stock pour les produits filtrés
+    // Récupère le stock pour chaque produit
     const results = await Promise.all(products.map(async (product) => {
       const id = product.id;
       const nom = product.name[0]?.value || '';
