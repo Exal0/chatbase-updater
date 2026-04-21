@@ -39,10 +39,11 @@ app.get('/produits', async (req, res) => {
       CATEGORIES_AUTORISEES.includes(parseInt(p.id_category_default))
     );
 
-    // Filtre par nom si recherche
+    // Filtre par nom OU description si recherche
     if (recherche) {
       products = products.filter(p =>
-        p.name[0]?.value?.toLowerCase().includes(recherche)
+        p.name[0]?.value?.toLowerCase().includes(recherche) ||
+        p.description_short[0]?.value?.toLowerCase().includes(recherche)
       );
     }
 
@@ -85,8 +86,6 @@ app.get('/produits', async (req, res) => {
   }
 });
 
-// Démarre le serveur
-const PORT = 3000;
 app.get('/', async (req, res) => {
   res.send(`
     <!DOCTYPE html>
@@ -162,8 +161,7 @@ app.get('/', async (req, res) => {
   `);
 });
 
-
-app.listen(PORT, () => {
-  console.log(`✅ Serveur démarré sur http://localhost:${PORT}`);
-  console.log(`📦 Route disponible : http://localhost:${PORT}/produits`);
+app.listen(3000, () => {
+  console.log('✅ Serveur démarré sur http://localhost:3000');
+  console.log('📦 Route disponible : http://localhost:3000/produits');
 });
