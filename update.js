@@ -1,111 +1,175 @@
 const fs = require('fs');
 const axios = require('axios');
+const https = require('https');
 
 // ⚙️ CONFIG
 const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
 const SHOP_URL = 'https://www.exalto-professional-shop.com';
 const OUTPUT_FILE = './chatbase_produits.txt';
 
-// ✅ Catégories autorisées
 const CATEGORIES_AUTORISEES = [4, 5, 6, 7, 11, 12, 13];
 
-// Config axios pour l'API PrestaShop
+const EXCLUDED_KEYWORDS = [
+  'ancienne collection',
+  'old',
+  'ancien',
+  'archive'
+];
+
 const api = axios.create({
   baseURL: `${SHOP_URL}/api`,
   auth: { username: API_KEY, password: '' },
+  httpsAgent: new https.Agent({ rejectUnauthorized: false }),
   params: { output_format: 'JSON' }
 });
 
-// Convertit le nom en slug pour l'URL
+// 🧼 CLEAN TEXT
+function cleanText(text = '') {
+  return text
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// ✂️ DESCRIPTION
+function makeShortDescription(desc) {
+  return cleanText(desc).substring(0, 150);
+}
+
+// 🚫 EXCLUSION COLLECTIONS
+function isExcluded(product) {
+  const name = product.name?.[0]?.value?.toLowerCase() || '';
+  return EXCLUDED_KEYWORDS.some(k => name.includes(k));
+}
+
+// 🔤 SLUG SAFE
 function makeSlug(nom) {
   return nom
     .toLowerCase()
-    .replace(/[àâä]/g, 'a')
-    .replace(/[éèêë]/g, 'e')
-    .replace(/[îï]/g, 'i')
-    .replace(/[ôö]/g, 'o')
-    .replace(/[ùûü]/g, 'u')
-    .replace(/ç/g, 'c')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 }
 
-// Récupère tous les produits actifs
+// 📂 CATÉGORIES
+async function getAllCategories() {
+  const res = await api.get('/categories', {
+    params: { display: '[id,name]' }
+  });
+
+  const map = {};
+  for (const c of res.data.categories) {
+    map[Number(c.id)] = c.name?.[0]?.value || '';
+  }
+
+  return map;
+}
+
+// 📦 PRODUITS
 async function getProducts() {
-  console.log('📦 Récupération des produits...');
   const res = await api.get('/products', {
     params: {
-      output_format: 'JSON',
-      display: '[id,name,price,description_short,active,id_default_image,link_rewrite,id_category_default]',
-      filter: { active: 1 }
+      display: '[id,name,price,description_short,description,id_default_image,link_rewrite,id_category_default]',
+      'filter[active]': 1
     }
   });
+
   return res.data.products;
 }
 
-// Récupère le stock d'un produit
-async function getStock(productId) {
+// 📊 STOCK
+async function getStock(id) {
   const res = await api.get('/stock_availables', {
     params: {
-      output_format: 'JSON',
       display: '[quantity]',
-      filter: { id_product: productId }
+      'filter[id_product]': id
     }
   });
-  const stocks = res.data.stock_availables;
-  if (!stocks || stocks.length === 0) return 0;
-  return parseInt(stocks[0].quantity) || 0;
+
+  const s = res.data.stock_availables;
+  return s?.length ? parseInt(s[0].quantity) || 0 : 0;
 }
 
-// Génère l'URL de l'image principale
-function getImageUrl(productId, imageId) {
-  return `${SHOP_URL}/${imageId}-large_default/${productId}.jpg`;
+// 🖼️ IMAGE PRESTASHOP CORRIGÉE (IMPORTANT)
+function getImageUrl(product) {
+  if (!product.id_default_image) return '';
+
+  const idStr = String(product.id_default_image);
+  const path = idStr.split('').join('/');
+
+  return `${SHOP_URL}/img/p/${path}/${idStr}.jpg`;
 }
 
-// Génère le fichier txt
+// 🔗 LIEN ULTRA SAFE
+function getProductLink(product) {
+  return `${SHOP_URL}/index.php?id_product=${product.id}&controller=product`;
+}
+
+// 🚀 MAIN
 async function generate() {
-  console.log('🚀 Démarrage...\n');
+  console.log('🚀 Génération en cours...\n');
 
-  const products = await getProducts();
+  const [products, categoriesMap] = await Promise.all([
+    getProducts(),
+    getAllCategories()
+  ]);
 
-  // Filtre par catégories autorisées
-  const filtres = products.filter(p =>
-    CATEGORIES_AUTORISEES.includes(parseInt(p.id_category_default))
-  );
+  const filtres = products.filter(p => {
+    const catOk = CATEGORIES_AUTORISEES.includes(parseInt(p.id_category_default));
+    const notExcluded = !isExcluded(p);
+    return catOk && notExcluded;
+  });
 
-  console.log(`✅ ${filtres.length} produits trouvés dans les catégories sélectionnées\n`);
+  console.log(`📦 Produits OK : ${filtres.length}\n`);
 
   const lines = [];
 
-  for (const product of filtres) {
-    const id = product.id;
-    const nom = product.name[0]?.value || '';
-    const description = product.description_short[0]?.value
-      ?.replace(/<[^>]*>/g, '')
-      .trim() || '';
-    const prix = parseFloat(product.price).toFixed(2);
-    const slug = product.link_rewrite[0]?.value || makeSlug(nom);
-    const imageUrl = getImageUrl(id, product.id_default_image);
-    const lien = `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`;
+  await Promise.all(filtres.map(async (p) => {
+    try {
+      const nom = p.name?.[0]?.value || '';
+      const prix = parseFloat(p.price).toFixed(2);
 
-    console.log(`🔄 Stock pour : ${nom}`);
-    const qty = await getStock(id);
-    const stock = qty > 0 ? 'En stock' : 'Rupture de stock';
+      const desc = makeShortDescription(
+        p.description_short?.[0]?.value ||
+        p.description?.[0]?.value ||
+        ''
+      );
 
-    lines.push(`Produit : ${nom}
-Prix TTC : ${prix} €
-Stock : ${stock}
-Description : ${description}
-Image : ${imageUrl}
-Lien : ${lien}
----`);
-  }
+      const stock = (await getStock(p.id)) > 0 ? 'En stock' : 'Rupture de stock';
+
+      const image = getImageUrl(p);
+      const link = getProductLink(p);
+
+      // 🔥 CATÉGORIE SAFE
+      let cat = categoriesMap[p.id_category_default] || 'Non catégorisé';
+
+      console.log(`✔ ${nom}`);
+
+      lines.push(
+`[![${nom}](${image})](${link})
+
+**${nom}**
+
+${prix} € | ${stock}
+
+Catégories : ${cat}
+
+${desc}
+
+---`
+      );
+
+    } catch (e) {
+      console.log(`❌ Produit skip ID ${p.id}`);
+    }
+  }));
 
   fs.writeFileSync(OUTPUT_FILE, lines.join('\n'), 'utf-8');
-  console.log(`\n✅ Fichier généré : ${OUTPUT_FILE}`);
+
+  console.log(`\n✅ TERMINÉ : ${OUTPUT_FILE}`);
   console.log(`📦 ${filtres.length} produits exportés`);
 }
 
 generate().catch(err => {
-  console.error('❌ Erreur :', err.message);
+  console.error('❌ ERREUR:', err.response?.status || '', err.message);
 });

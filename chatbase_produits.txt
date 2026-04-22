@@ -1,281 +1,572 @@
-Produit : ALMA - Spéciale afro
-Prix TTC : 92.50 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1177-large_default/53.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/53-tete-malleable-alma.html
+[![MIKE - Spéciale barbe](https://www.exalto-professional-shop.com/img/p/8/6/9/869.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=167&controller=product)
+
+**MIKE - Spéciale barbe**
+
+62.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête malléable professionnelle homme Mike, l'entrée de gamme de chez Exalto pour les coiffeurs qui souhaitent perfectionner leurs techniques de cou
+
 ---
-Produit : JULIA - Spéciale coupe
-Prix TTC : 57.50 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/930-large_default/101.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/101-tete-malleable-julia.html
+[![ALMA - Spéciale afro](https://www.exalto-professional-shop.com/img/p/1/1/7/7/1177.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=53&controller=product)
+
+**ALMA - Spéciale afro**
+
+92.50 € | En stock
+
+Catégories : Têtes malléables femme
+
+La tête à coiffer professionnelle Alma, l'incontournable de chez Exalto pour les coiffeurs qui souhaitent perfectionner leur techniques de coupe sur c
+
 ---
-Produit : ENORA - Spéciale coupe
-Prix TTC : 63.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/928-large_default/102.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/102-tete-malleable-femme-enora.html
+[![JULIA - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/9/3/0/930.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=101&controller=product)
+
+**JULIA - Spéciale coupe**
+
+57.50 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Julia est un modèle unique de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissage coiffu
+
 ---
-Produit : CLARISSE - Spéciale coupe
-Prix TTC : 70.00 €
-Stock : En stock
-Description : Tête à coiffer professionnelle Clarisse idéale pour la coupe
-Notre tête à coiffer professionnelle Clarisse est le best-seller de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissage coiffure. Cette tête malléable cheveux 100% naturels est idéale pour vos formations coiffure spéciales coupe. Nous recommandons toujours de s’exercer sur une tête à coiffer professionnelle brune pour les techniques de coupe car les lignes de coupe sont plus visibles.
-Image : https://www.exalto-professional-shop.com/924-large_default/104.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/104-tete-malleable-femme-clarisse.html
+[![ADELE - Spéciale coloration](https://www.exalto-professional-shop.com/img/p/9/2/0/920.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=106&controller=product)
+
+**ADELE - Spéciale coloration**
+
+70.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Adèle est un indispensable de chez Exalto pour les coiffeurs qui souhaitent développer leur créativité et approfo
+
 ---
-Produit : ADELE - Spéciale coloration
-Prix TTC : 70.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/920-large_default/106.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/106-tete-malleable-femme-adele.html
+[![ENORA - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/9/2/8/928.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=102&controller=product)
+
+**ENORA - Spéciale coupe**
+
+63.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Enora est le produit idéal pour l'apprentissage en école de coiffure (CAP/BP) pour les apprentis coiffeurs qui so
+
 ---
-Produit : JULIETTE - Spéciale balayage
-Prix TTC : 70.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/918-large_default/107.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/107-tete-malleable-femme-juliette.html
+[![NINON - Spéciale coloration](https://www.exalto-professional-shop.com/img/p/9/1/2/912.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=110&controller=product)
+
+**NINON - Spéciale coloration**
+
+82.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Ninon est un incontournable de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissage en te
+
 ---
-Produit : LUCIE - Spéciale coloration
-Prix TTC : 71.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/916-large_default/108.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/108-tete-malleable-femme-lucie.html
+[![SARAH - Spéciale chignon](https://www.exalto-professional-shop.com/img/p/8/9/8/898.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=118&controller=product)
+
+**SARAH - Spéciale chignon**
+
+103.00 € | Rupture de stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Sarah est l'indispensable de chez Exalto pour les coiffeurs qui souhaitent approfondir ou débuter leur apprentiss
+
 ---
-Produit : LILOU - spéciale coupe
-Prix TTC : 82.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/914-large_default/109.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/109-tete-malleable-femme-lilou.html
+[![ANNA - Spéciale balayage](https://www.exalto-professional-shop.com/img/p/9/0/8/908.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=112&controller=product)
+
+**ANNA - Spéciale balayage**
+
+87.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Anna est l'indispensable du balayage chez Exalto Professionnel pour les coiffeurs en salon qui souhaitent approfo
+
 ---
-Produit : NINON - Spéciale coloration
-Prix TTC : 82.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/912-large_default/110.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/110-tete-malleable-femme-ninon.html
+[![JULIETTE - Spéciale balayage](https://www.exalto-professional-shop.com/img/p/9/1/8/918.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=107&controller=product)
+
+**JULIETTE - Spéciale balayage**
+
+70.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Juliette est le modèle de référence chez Exalto pour les coiffeurs en salon et apprentis coiffeurs en école qui s
+
 ---
-Produit : ANNA - Spéciale balayage
-Prix TTC : 87.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/908-large_default/112.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/112-tete-malleable-femme-anna.html
+[![MADDIE - Spéciale granny style](https://www.exalto-professional-shop.com/img/p/8/5/9/859.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=183&controller=product)
+
+**MADDIE - Spéciale granny style**
+
+78.00 € | Rupture de stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Maddie est une nouveauté de chez Exalto pour les coiffeurs qui souhaitent appréhender au mieux les techniques de 
+
 ---
-Produit : MILA - Spéciale coloration
-Prix TTC : 90.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1011-large_default/113.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/113-tete-malleable-femme-mila.html
+[![Étau en plastique pour tête à coiffer pro](https://www.exalto-professional-shop.com/img/p/9/9/2/992.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=59&controller=product)
+
+**Étau en plastique pour tête à coiffer pro**
+
+8.33 € | En stock
+
+Catégories : Étaux
+
+Etau sur table / Support universel pour tête malléable professionnelle / rotation à 360° / réglage en hauteur
+
 ---
-Produit : AMANDINE - Spéciale coupe
-Prix TTC : 95.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/904-large_default/114.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/114-tete-malleable-femme-amandine.html
+[![SERENA - Spéciale Chignon](https://www.exalto-professional-shop.com/img/p/8/6/1/861.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=171&controller=product)
+
+**SERENA - Spéciale Chignon**
+
+66.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Serena est l'entrée de gamme de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissage du c
+
 ---
-Produit : IRIS - Spéciale coupe
-Prix TTC : 95.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/902-large_default/115.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/115-tete-malleable-femme-iris.html
+[![Étau en plastique pro](https://www.exalto-professional-shop.com/img/p/1/0/0/3/1003.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=202&controller=product)
+
+**Étau en plastique pro**
+
+10.00 € | Rupture de stock
+
+Catégories : Étaux
+
+Etau sur table / Support universel pour tête malléable professionnelle / rotation à 360° / réglage en hauteur
+
 ---
-Produit : LEA - Spéciale afro crépus
-Prix TTC : 75.00 €
-Stock : Rupture de stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1158-large_default/134.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/134-tete-malleable-afro-lea.html
+[![DUA - Coupe duo](https://www.exalto-professional-shop.com/img/p/1/2/6/9/1269.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=428&controller=product)
+
+**DUA - Coupe duo**
+
+57.50 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Dua est l'indispensable du balayage chez Exalto Professionnel pour les coiffeurs en salon qui souhaitent approfon
+
 ---
-Produit : ZOÉ - Spéciale coloration
-Prix TTC : 70.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/881-large_default/135.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/135-tete-malleable-coloration-zoe.html
+[![EMMA - spéciale chignon (Nouvelle Collection)](https://www.exalto-professional-shop.com/img/p/1/1/3/2/1132.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=129&controller=product)
+
+**EMMA - spéciale chignon (Nouvelle Collection)**
+
+173.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle avec buste Emma est la référence de chez Exalto pour les coiffeurs et passionnés qui souhaitent perfectionner leu
+
 ---
-Produit : STELLA - Spéciale coupe
-Prix TTC : 128.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1179-large_default/148.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/148-tete-malleable-stella.html
+[![KYLIE - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/1/0/8/9/1089.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=169&controller=product)
+
+**KYLIE - Spéciale coupe**
+
+53.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Kylie est le modèle entrée de gamme de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissa
+
 ---
-Produit : MAUREEN - Spéciale balayage
-Prix TTC : 73.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1143-large_default/168.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/168-tete-malleable-balayage-maureen.html
+[![ALEX - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/8/8/9/889.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=125&controller=product)
+
+**ALEX - Spéciale coupe**
+
+70.83 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête malléable professionnelle homme Alex, le modèle haut de gamme de chez Exalto pour les coiffeurs qui souhaitent perfectionner leurs techniques 
+
 ---
-Produit : KYLIE - Spéciale coupe
-Prix TTC : 53.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1089-large_default/169.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/169-tete-malleable-coupe-kylie.html
+[![BUSTE POUR TÊTES MALLÉABLES](https://www.exalto-professional-shop.com/img/p/1/0/0/9/1009.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=145&controller=product)
+
+**BUSTE POUR TÊTES MALLÉABLES**
+
+24.17 € | Rupture de stock
+
+Catégories : Mèches, buste
+
+Buste pour têtes malléables Ce buste vous permet d'habiller vos têtes malléables et de travailler sur des têtes type compétition à moindre coût. N'imp
+
 ---
-Produit : LESLIE - Toutes techniques
-Prix TTC : 55.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1139-large_default/170.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/170-tete-malleable-toutes-techniques-leslie.html
+[![LEA - Spéciale afro crépus](https://www.exalto-professional-shop.com/img/p/1/1/5/8/1158.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=134&controller=product)
+
+**LEA - Spéciale afro crépus**
+
+75.00 € | Rupture de stock
+
+Catégories : Têtes malléables femme
+
+La tête à coiffer professionnelle Léa, l'indispensable de chez Exalto pour les coiffeurs qui souhaitent perfectionner leur technique de coupe sur chev
+
 ---
-Produit : OLIVIA - Spéciale coupe
-Prix TTC : 72.50 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/954-large_default/173.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/173-tete-a-coiffer-coupe-olivia.html
+[![THOMAS - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/8/9/1/891.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=124&controller=product)
+
+**THOMAS - Spéciale coupe**
+
+73.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête malléable professionnelle homme Thomas, l'incontournable de chez Exalto pour les coiffeurs qui souhaitent perfectionner leurs techniques de co
+
 ---
-Produit : MADDIE - Spéciale granny style
-Prix TTC : 78.00 €
-Stock : Rupture de stock
-Description : 
-Image : https://www.exalto-professional-shop.com/859-large_default/183.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/183-tete-a-coiffer-professionnelle-grise-maddie.html
+[![LESLIE - Toutes techniques](https://www.exalto-professional-shop.com/img/p/1/1/3/9/1139.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=170&controller=product)
+
+**LESLIE - Toutes techniques**
+
+55.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Leslie est le modèle entrée de gamme de chez Exalto Professionnel pour les coiffeurs en salon ou bien les apprent
+
 ---
-Produit : CHARLIE - Spéciale Coloration
-Prix TTC : 57.50 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1066-large_default/219.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/219-tete-a-coiffer-professionnelle-blond-coloration-charlie.html
+[![ADELE B - Spéciale coloration](https://www.exalto-professional-shop.com/img/p/1/0/8/5/1085.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=225&controller=product)
+
+**ADELE B - Spéciale coloration**
+
+70.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Adèle est un indispensable de chez Exalto pour les coiffeurs qui souhaitent développer leur créativité et approfo
+
 ---
-Produit : LANA - Spéciale Balayage
-Prix TTC : 57.50 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1141-large_default/221.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/221-tete-a-coiffer-professionnelle-balayage-lana.html
+[![STELLA - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/1/1/7/9/1179.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=148&controller=product)
+
+**STELLA - Spéciale coupe**
+
+128.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+La tête à coiffer professionnelle Stella, le must have de chez Exalto pour les coiffeurs qui souhaitent perfectionner leurs techniques de coupe sur ch
+
 ---
-Produit : ADELE B - Spéciale coloration
-Prix TTC : 70.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1085-large_default/225.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/225-tete-malleable-femme-coloration-adeleb.html
+[![LUCIE - Spéciale coloration](https://www.exalto-professional-shop.com/img/p/9/1/6/916.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=108&controller=product)
+
+**LUCIE - Spéciale coloration**
+
+71.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Lucie est le modèle à tout faire de chez Exalto Professionnel pour les coiffeurs en salon ou bien apprentis coiff
+
 ---
-Produit : EMY - Spéciale boucle serrée
-Prix TTC : 92.50 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1161-large_default/261.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/261-alma-speciale-boucle-serree-.html
+[![LUDO - Spéciale coupe homme](https://www.exalto-professional-shop.com/img/p/8/7/1/871.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=166&controller=product)
+
+**LUDO - Spéciale coupe homme**
+
+59.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête malléable professionnelle homme Ludo, l'entrée de gamme de chez Exalto pour les coiffeurs qui souhaitent perfectionner leurs techniques de cou
+
 ---
-Produit : DUA - Coupe duo
-Prix TTC : 57.50 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1269-large_default/428.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/428-dua-coupe-duo.html
+[![CHARLIE - Spéciale Coloration](https://www.exalto-professional-shop.com/img/p/1/0/6/6/1066.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=219&controller=product)
+
+**CHARLIE - Spéciale Coloration**
+
+57.50 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Charlie est la blonde très claire de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissage
+
 ---
-Produit : HUGO - Spéciale coupe
-Prix TTC : 76.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/893-large_default/123.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/123-tete-malleable-homme-hugo.html
+[![ALICE - Spéciale coloration (nouvelle collection)](https://www.exalto-professional-shop.com/img/p/1/1/2/5/1125.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=253&controller=product)
+
+**ALICE - Spéciale coloration (nouvelle collection)**
+
+91.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Alice est un incontournable de chez Exalto pour les coiffeurs qui souhaitent développer leur créativité et approf
+
 ---
-Produit : THOMAS - Spéciale coupe
-Prix TTC : 73.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/891-large_default/124.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/124-tete-malleable-homme-thomas.html
+[![MAUREEN - Spéciale balayage](https://www.exalto-professional-shop.com/img/p/1/1/4/3/1143.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=168&controller=product)
+
+**MAUREEN - Spéciale balayage**
+
+73.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Maureen est l'indispensable du balayage chez Exalto Professionnel pour les coiffeurs en salon qui souhaitent appr
+
 ---
-Produit : ALEX - Spéciale coupe
-Prix TTC : 70.83 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/889-large_default/125.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/125-tete-malleable-homme-alex.html
+[![SERGIO - Spéciale Barbe](https://www.exalto-professional-shop.com/img/p/1/2/3/8/1238.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=425&controller=product)
+
+**SERGIO - Spéciale Barbe**
+
+100.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+
+
 ---
-Produit : BEN - Spéciale coupe & rassage
-Prix TTC : 82.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/887-large_default/126.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/126-tete-malleable-barbe-homme-ben.html
+[![EMY - Spéciale boucle serrée](https://www.exalto-professional-shop.com/img/p/1/1/6/1/1161.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=261&controller=product)
+
+**EMY - Spéciale boucle serrée**
+
+92.50 € | En stock
+
+Catégories : Têtes malléables femme
+
+
+
 ---
-Produit : LUDO - Spéciale coupe homme
-Prix TTC : 59.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/871-large_default/166.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/166-tete-malleable-ludo.html
+[![CLARISSE - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/9/2/4/924.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=104&controller=product)
+
+**CLARISSE - Spéciale coupe**
+
+70.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Tête à coiffer professionnelle Clarisse idéale pour la coupe Notre tête à coiffer professionnelle Clarisse est le best-seller de chez Exalto pour les 
+
 ---
-Produit : MIKE - Spéciale barbe
-Prix TTC : 62.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/869-large_default/167.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/167-tete-malleable-barbe-mike.html
+[![SCOTT - Spéciale coupe afro](https://www.exalto-professional-shop.com/img/p/1/1/5/2/1152.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=208&controller=product)
+
+**SCOTT - Spéciale coupe afro**
+
+95.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête à coiffer professionnelle homme Scott, cheveux afro avec barbe crépu, la nouveauté de chez Exalto indispensable pour les coiffeurs qui souhait
+
 ---
-Produit : LENNY - Spéciale coupe homme afro
-Prix TTC : 90.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/855-large_default/184.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/184-tete-a-coiffer-coupe-afro-homme-lenny.html
+[![ROMY - Spéciale chignon](https://www.exalto-professional-shop.com/img/p/9/8/0/980.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=199&controller=product)
+
+**ROMY - Spéciale chignon**
+
+112.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Romy est la nouveauté de chez Exalto Professionnel, idéale pour les coiffeurs qui souhaitent perfectionner leur a
+
 ---
-Produit : SCOTT - Spéciale coupe afro
-Prix TTC : 95.00 €
-Stock : En stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1152-large_default/208.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/208-tete-a-coiffer-afro-coupe-homme-scott.html
+[![ANASTASIA - Spéciale chignon & coloration (Nouvelle collection)](https://www.exalto-professional-shop.com/img/p/1/1/3/3/1133.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=161&controller=product)
+
+**ANASTASIA - Spéciale chignon & coloration (Nouvelle collection)**
+
+179.00 € | Rupture de stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle avec buste Anastasia est notre best-seller pour les coiffeurs et passionnés qui souhaitent perfectionner leur app
+
 ---
-Produit : Trépied en aluminium support universel pour tête à coiffer
-Prix TTC : 87.00 €
-Stock : En stock
-Description : Etau sur pied / Support universel pour tête malléable professionnelle / rotation à 360°
-Image : https://www.exalto-professional-shop.com/937-large_default/43.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/43-trepied-en-alluminium.html
+[![LENNY - Spéciale coupe homme afro](https://www.exalto-professional-shop.com/img/p/8/5/5/855.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=184&controller=product)
+
+**LENNY - Spéciale coupe homme afro**
+
+90.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête à coiffer professionnelle homme Lenny, cheveux afro, crépu, la nouveauté de chez Exalto indispensable pour les coiffeurs qui souhaitent perfec
+
 ---
-Produit : Trépied haut de gamme pour tête à coiffer pro
-Prix TTC : 99.17 €
-Stock : En stock
-Description : Etau sur pied / Support universel pour tête malléable / rotation à 360°
-Image : https://www.exalto-professional-shop.com/932-large_default/61.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/61-trepied-haut-de-gamme.html
+[![LANA - Spéciale Balayage](https://www.exalto-professional-shop.com/img/p/1/1/4/1/1141.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=221&controller=product)
+
+**LANA - Spéciale Balayage**
+
+57.50 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Lana est l'indispensable du balayage chez Exalto Professionnel pour les coiffeurs en salon qui souhaitent approfo
+
 ---
-Produit : Étau en métal
-Prix TTC : 44.00 €
-Stock : En stock
-Description : Support universel pour tête malléable / rotation à 360° / réglage en hauteur
-Image : https://www.exalto-professional-shop.com/972-large_default/15.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/15-etau-en-metal.html
+[![MANON - Spéciale chignon](https://www.exalto-professional-shop.com/img/p/8/9/5/895.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=120&controller=product)
+
+**MANON - Spéciale chignon**
+
+120.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Manon est la tête chignon pour les confirmés de chez Exalto, idéale pour les coiffeurs qui souhaitent perfectionn
+
 ---
-Produit : Étau en plastique pour tête à coiffer pro
-Prix TTC : 8.33 €
-Stock : En stock
-Description : Etau sur table / Support universel pour tête malléable professionnelle / rotation à 360° / réglage en hauteur
-Image : https://www.exalto-professional-shop.com/992-large_default/59.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/59-etau-plastique.html
+[![Trépied haut de gamme pour tête à coiffer pro](https://www.exalto-professional-shop.com/img/p/9/3/2/932.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=61&controller=product)
+
+**Trépied haut de gamme pour tête à coiffer pro**
+
+99.17 € | En stock
+
+Catégories : Trépieds
+
+Etau sur pied / Support universel pour tête malléable / rotation à 360°
+
 ---
-Produit : Étau en plastique pro
-Prix TTC : 10.00 €
-Stock : Rupture de stock
-Description : Etau sur table / Support universel pour tête malléable professionnelle / rotation à 360° / réglage en hauteur
-Image : https://www.exalto-professional-shop.com/1003-large_default/202.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/202-etau-plastique.html
+[![Étau en métal](https://www.exalto-professional-shop.com/img/p/9/7/2/972.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=15&controller=product)
+
+**Étau en métal**
+
+44.00 € | En stock
+
+Catégories : Étaux
+
+Support universel pour tête malléable / rotation à 360° / réglage en hauteur
+
 ---
-Produit : BUSTE POUR TÊTES MALLÉABLES
-Prix TTC : 24.17 €
-Stock : Rupture de stock
-Description : 
-Image : https://www.exalto-professional-shop.com/1009-large_default/145.jpg
-Lien : https://www.exalto-professional-shop.com/fr/nos-modeles/145-buste-pour-tetes-malleables.html
+[![ARIANA - Spéciale chignon (nouvelle collection)](https://www.exalto-professional-shop.com/img/p/1/1/2/8/1128.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=181&controller=product)
+
+**ARIANA - Spéciale chignon (nouvelle collection)**
+
+124.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle avec buste Ariana est le nouveau modèle petits budgets de chez Exalto pour les coiffeurs et passionnés qui souhai
+
+---
+[![ZOÉ - Spéciale coloration](https://www.exalto-professional-shop.com/img/p/8/8/1/881.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=135&controller=product)
+
+**ZOÉ - Spéciale coloration**
+
+70.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle 4 zones couleur Zoé est un incontournable de chez Exalto pour les coiffeurs qui souhaitent approfondir leur appre
+
+---
+[![VANESSA - Spéciale chignon pas chère](https://www.exalto-professional-shop.com/img/p/1/1/0/5/1105.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=242&controller=product)
+
+**VANESSA - Spéciale chignon pas chère**
+
+120.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle avec buste Vanessa est le nouveau modèle petits budgets de chez Exalto pour les coiffeurs et passionnés qui souha
+
+---
+[![JOHN - Spéciale coupe homme](https://www.exalto-professional-shop.com/img/p/1/2/2/8/1228.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=415&controller=product)
+
+**JOHN - Spéciale coupe homme**
+
+78.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+
+
+---
+[![IRIS - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/9/0/2/902.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=115&controller=product)
+
+**IRIS - Spéciale coupe**
+
+95.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Iris est un modèle unique de chez Exalto Professionnel pour les coiffeurs en salon qui souhaitent approfondir leu
+
+---
+[![OLIVIA - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/9/5/4/954.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=173&controller=product)
+
+**OLIVIA - Spéciale coupe**
+
+72.50 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Olivia est le modèle trendy avec le visage blanc de chez Exalto pour les coiffeurs qui souhaitent approfondir leu
+
+---
+[![Trépied en aluminium support universel pour tête à coiffer](https://www.exalto-professional-shop.com/img/p/9/3/7/937.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=43&controller=product)
+
+**Trépied en aluminium support universel pour tête à coiffer**
+
+87.00 € | En stock
+
+Catégories : Trépieds
+
+Etau sur pied / Support universel pour tête malléable professionnelle / rotation à 360°
+
+---
+[![CARLA - Spéciale chignon](https://www.exalto-professional-shop.com/img/p/9/6/2/962.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=119&controller=product)
+
+**CARLA - Spéciale chignon**
+
+157.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle avec buste Carla est la référence de chez Exalto pour les coiffeurs et passionnés qui souhaitent perfectionner le
+
+---
+[![MILA - Spéciale coloration](https://www.exalto-professional-shop.com/img/p/1/0/1/1/1011.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=113&controller=product)
+
+**MILA - Spéciale coloration**
+
+90.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Mila est la blonde très claire de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissage en
+
+---
+[![HUGO - Spéciale coupe](https://www.exalto-professional-shop.com/img/p/8/9/3/893.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=123&controller=product)
+
+**HUGO - Spéciale coupe**
+
+76.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête malléable professionnelle homme Hugo, l'incontournable de chez Exalto pour les coiffeurs qui souhaitent perfectionner leurs techniques de coup
+
+---
+[![JANE - Spéciale coloration](https://www.exalto-professional-shop.com/img/p/9/0/0/900.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=116&controller=product)
+
+**JANE - Spéciale coloration**
+
+99.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Jane est un modèle unique de chez Exalto pour les coiffeurs qui souhaitent développer leur créativité et approfon
+
+---
+[![BEN - Spéciale coupe & rassage](https://www.exalto-professional-shop.com/img/p/8/8/7/887.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=126&controller=product)
+
+**BEN - Spéciale coupe & rassage**
+
+82.00 € | En stock
+
+Catégories : Têtes malléables homme
+
+La tête malléable professionnelle homme Ben, le must have de chez Exalto pour les coiffeurs qui souhaitent perfectionner leurs techniques de coupe hom
+
+---
+[![LILOU - spéciale coupe](https://www.exalto-professional-shop.com/img/p/9/1/4/914.jpg)](https://www.exalto-professional-shop.com/index.php?id_product=109&controller=product)
+
+**LILOU - spéciale coupe**
+
+82.00 € | En stock
+
+Catégories : Têtes malléables femme
+
+Notre tête à coiffer professionnelle Lilou est un incontournable de chez Exalto pour les coiffeurs qui souhaitent approfondir leur apprentissage coiff
+
 ---
