@@ -19,6 +19,26 @@ const NOMS_CATEGORIES = {
   12: 'Étau',
   13: 'Mèches & bustes'
 };
+const CATEGORIE_MAP = {
+  'femme': [4],
+  'homme': [5],
+  'chignon': [6],
+  'modeles': [7],
+  'trepied': [11],
+  'etau': [12],
+  'meches': [13],
+  'bustes': [13]
+};
+
+// Mots à ignorer dans la recherche
+const STOP_WORDS = [
+  'une', 'des', 'les', 'pour', 'avec', 'dans', 'sur', 'par', 'que',
+  'qui', 'est', 'pas', 'plus', 'tres', 'bien', 'avoir', 'etre',
+  'tete', 'tetes', 'malleable', 'malleables', 'coiffer', 'coiffure',
+  'cherche', 'veux', 'voudrais', 'aimerais', 'besoin', 'trouver',
+  'vous', 'nous', 'votre', 'notre', 'mon', 'ton', 'son',
+  'aussi', 'comme', 'faire', 'chez', 'exalto', 'professionnelle'
+];
 
 const api = axios.create({
   baseURL: `${SHOP_URL}/api`,
@@ -28,6 +48,7 @@ const api = axios.create({
 app.get('/produits', async (req, res) => {
   try {
     const recherche = req.query.nom?.toLowerCase() || '';
+    const categorie = req.query.categorie?.toLowerCase() || '';
 
     // Récupère les produits
     const prodRes = await api.get('/products', {
@@ -41,26 +62,44 @@ app.get('/produits', async (req, res) => {
     let products = prodRes.data.products;
     console.log('TOTAL PRODUITS:', products.length);
 
-    // Filtre par catégories
-    products = products.filter(p =>
-      CATEGORIES_AUTORISEES.includes(Number(p.id_category_default))
-    );
-    console.log('APRÈS FILTRE CATÉGORIES:', products.length);
+    // Filtre par catégorie si précisée, sinon toutes les catégories autorisées
+    if (categorie && CATEGORIE_MAP[categorie]) {
+      const ids = CATEGORIE_MAP[categorie];
+      products = products.filter(p => ids.includes(Number(p.id_category_default)));
+      console.log(`FILTRE CATÉGORIE "${categorie}":`, products.length);
+    } else {
+      products = products.filter(p =>
+        CATEGORIES_AUTORISEES.includes(Number(p.id_category_default))
+      );
+      console.log('FILTRE TOUTES CATÉGORIES:', products.length);
+    }
 
     // Filtre par mots-clés si recherche
     if (recherche) {
-      const mots = recherche.split(' ').filter(m => m.length > 2);
+      // Nettoie les accents pour la comparaison
+      const normalise = str => str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+      const mots = normalise(recherche)
+        .split(' ')
+        .filter(m => m.length > 2 && !STOP_WORDS.includes(m));
+
       console.log('MOTS RECHERCHÉS:', mots);
-      products = products.filter(p => {
-        const catNom = NOMS_CATEGORIES[Number(p.id_category_default)] || '';
-        const texte = [
-          p.name?.[0]?.value || '',
-          p.description_short?.[0]?.value || '',
-          p.description?.[0]?.value || '',
-          catNom
-        ].join(' ').toLowerCase();
-        return mots.some(mot => texte.includes(mot));
-      });
+
+      if (mots.length > 0) {
+        products = products.filter(p => {
+          const texte = normalise([
+            p.name?.[0]?.value || '',
+            p.description_short?.[0]?.value || '',
+            p.description?.[0]?.value || '',
+            NOMS_CATEGORIES[Number(p.id_category_default)] || ''
+          ].join(' '));
+          return mots.some(mot => texte.includes(mot));
+        });
+      }
+
       console.log('APRÈS FILTRE RECHERCHE:', products.length);
     }
 
@@ -75,7 +114,7 @@ app.get('/produits', async (req, res) => {
         product.description?.[0]?.value?.replace(/<[^>]*>/g, '').trim() || '';
       const image = `${SHOP_URL}/${product.id_default_image}-large_default/${id}.jpg`;
       const lien = `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`;
-      const categorie = NOMS_CATEGORIES[Number(product.id_category_default)] || 'Autre';
+      const categorieNom = NOMS_CATEGORIES[Number(product.id_category_default)] || 'Autre';
 
       // Stock
       const stockRes = await api.get('/stock_availables', {
@@ -89,7 +128,7 @@ app.get('/produits', async (req, res) => {
 
       return {
         nom,
-        categorie,
+        categorie: categorieNom,
         prix: `${prix} €`,
         stock: qty > 0 ? 'En stock' : 'Rupture de stock',
         description,
@@ -124,8 +163,8 @@ app.get('/', async (req, res) => {
         .card:hover { transform: translateY(-4px); }
         .card img { width: 100%; height: 200px; object-fit: cover; }
         .card-body { padding: 15px; }
-        .card-body h3 { font-size: 14px; color: #333; margin-bottom: 8px; }
-        .categorie { font-size: 11px; color: #888; margin-bottom: 6px; text-transform: uppercase; }
+        .card-body h3 { font-size: 14px; color: #333; margin-bottom: 6px; }
+        .categorie { font-size: 11px; color: #888; margin-bottom: 4px; text-transform: uppercase; }
         .prix { font-weight: bold; color: #222; font-size: 16px; }
         .stock { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
         .stock.dispo { background: #e6f4ea; color: #2e7d32; }
