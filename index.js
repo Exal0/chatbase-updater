@@ -1,62 +1,60 @@
-const express = require("express");
-const axios = require("axios");
-const cors = require("cors");
+const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // CONFIG
-const API_KEY = "7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3";
-const SHOP_URL = "https://www.exalto-professional-shop.com";
+const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
+const SHOP_URL = 'https://www.exalto-professional-shop.com';
 
 // Config axios
 const api = axios.create({
   baseURL: `${SHOP_URL}/api`,
-  auth: { username: API_KEY, password: "" },
-  params: { output_format: "JSON" },
+  auth: { username: API_KEY, password: '' },
+  params: { output_format: 'JSON' }
 });
 
 // Utilitaire pour nettoyer le HTML
-function stripHtml(str = "") {
-  return String(str)
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+function stripHtml(str = '') {
+  return String(str).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 // Utilitaire pour lire les champs multilangues PrestaShop
 function getLangValue(field) {
-  if (!field) return "";
-  if (Array.isArray(field)) return field[0]?.value || "";
-  if (typeof field === "object" && field.value) return field.value;
-  if (typeof field === "string") return field;
-  return "";
+  if (!field) return '';
+  if (Array.isArray(field)) return field[0]?.value || '';
+  if (typeof field === 'object' && field.value) return field.value;
+  if (typeof field === 'string') return field;
+  return '';
 }
 
-// Route que Chatbase va appeler
-app.get("/produits", async (req, res) => {
+// Route API
+app.get('/produits', async (req, res) => {
   try {
-    const rechercheNom = (req.query.nom || "").toLowerCase().trim();
-    const rechercheCategorie = (req.query.categorie || "").toLowerCase().trim();
+    const rechercheNom = (req.query.nom || '').toLowerCase().trim();
+    const rechercheCategorie = (req.query.categorie || '').toLowerCase().trim();
+    const rechercheFeature = (req.query.feature || '').toLowerCase().trim();
 
-    // 1) Récupère tous les produits actifs avec associations
-    const prodRes = await api.get("/products", {
+    // 1) Produits actifs avec associations
+    const prodRes = await api.get('/products', {
       params: {
-        output_format: "JSON",
-        display: "full",
-        "filter[active]": "[1]",
-      },
+        output_format: 'JSON',
+        display: 'full',
+        'filter[active]': '[1]'
+      }
     });
 
     let products = prodRes.data.products || [];
 
-    // 2) Récupère toutes les catégories pour afficher leurs noms
-    const categoriesRes = await api.get("/categories", {
+    // 2) Catégories
+    const categoriesRes = await api.get('/categories', {
       params: {
-        output_format: "JSON",
-        display: "[id,name]",
-      },
+        output_format: 'JSON',
+        display: '[id,name]'
+      }
     });
 
     const categoriesList = categoriesRes.data.categories || [];
@@ -66,7 +64,40 @@ app.get("/produits", async (req, res) => {
       categoriesMap[String(cat.id)] = getLangValue(cat.name);
     }
 
-    // 3) Construit le résultat enrichi
+    // 3) Features
+    const featuresRes = await api.get('/product_features', {
+      params: {
+        output_format: 'JSON',
+        display: '[id,name]'
+      }
+    });
+
+    const featuresList = featuresRes.data.product_features || [];
+    const featuresMap = {};
+
+    for (const feature of featuresList) {
+      featuresMap[String(feature.id)] = getLangValue(feature.name);
+    }
+
+    // 4) Valeurs des features
+    const featureValuesRes = await api.get('/product_feature_values', {
+      params: {
+        output_format: 'JSON',
+        display: '[id,id_feature,value]'
+      }
+    });
+
+    const featureValuesList = featureValuesRes.data.product_feature_values || [];
+    const featureValuesMap = {};
+
+    for (const featureValue of featureValuesList) {
+      featureValuesMap[String(featureValue.id)] = {
+        id_feature: String(featureValue.id_feature),
+        value: getLangValue(featureValue.value)
+      };
+    }
+
+    // 5) Construction des résultats
     let results = await Promise.all(
       products.map(async (product) => {
         const id = product.id;
@@ -77,7 +108,7 @@ app.get("/produits", async (req, res) => {
 
         const imageUrl = product.id_default_image
           ? `${SHOP_URL}/${product.id_default_image}-large_default/${id}.jpg`
-          : "https://via.placeholder.com/220x200?text=Image+indisponible";
+          : 'https://via.placeholder.com/220x200?text=Image+indisponible';
 
         const lien = slug
           ? `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`
@@ -89,20 +120,38 @@ app.get("/produits", async (req, res) => {
           .map((cat) => categoriesMap[String(cat.id)] || `Catégorie ${cat.id}`)
           .filter(Boolean);
 
+        // Features du produit
+        const productFeatures = product.associations?.product_features || [];
+        const features = {};
+
+        for (const pf of productFeatures) {
+          const featureId = String(pf.id);
+          const featureValueId = String(pf.id_feature_value);
+
+          const featureName = featuresMap[featureId];
+          const featureValue = featureValuesMap[featureValueId]?.value;
+
+          if (featureName && featureValue) {
+            features[featureName] = featureValue;
+          }
+        }
+
+        const featuresText = Object.entries(features)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(' | ');
 
         // Stock
         let qty = 0;
         try {
-          const stockRes = await api.get("/stock_availables", {
+          const stockRes = await api.get('/stock_availables', {
             params: {
-              output_format: "JSON",
-              display: "[quantity]",
-              "filter[id_product]": `[${id}]`,
-            },
+              output_format: 'JSON',
+              display: '[quantity]',
+              'filter[id_product]': `[${id}]`
+            }
           });
 
-          qty =
-            parseInt(stockRes.data.stock_availables?.[0]?.quantity, 10) || 0;
+          qty = parseInt(stockRes.data.stock_availables?.[0]?.quantity, 10) || 0;
         } catch (e) {
           console.error(`Erreur stock produit ${id}:`, e.message);
         }
@@ -110,51 +159,50 @@ app.get("/produits", async (req, res) => {
         return {
           nom,
           prix: `${prix} €`,
-          stock: qty > 0 ? "En stock" : "Rupture de stock",
+          stock: qty > 0 ? 'En stock' : 'Rupture de stock',
           description,
           image: imageUrl,
           lien,
           categories: categoriesNames,
+          features,
+          features_text: featuresText
         };
-      }),
+      })
     );
 
-       //filtre delete categorie
-        const CATEGORIES_A_EXCLURE = ["nîmes", "avignon", "terrade"];
-
-        results = results.filter((product) => {
-          return !(product.categories || []).some((cat) =>
-            CATEGORIES_A_EXCLURE.some((exclue) =>
-              cat.toLowerCase().includes(exclue),
-            ),
-          );
-        });
-
-    // 4) Filtre par nom
+    // 6) Recherche par nom
     if (rechercheNom) {
       results = results.filter((product) =>
-        product.nom.toLowerCase().includes(rechercheNom),
+        product.nom.toLowerCase().includes(rechercheNom)
       );
     }
 
-    // 5) Filtre par catégorie
+    // 7) Recherche par catégorie
     if (rechercheCategorie) {
       results = results.filter((product) =>
         (product.categories || []).some((cat) =>
-          cat.toLowerCase().includes(rechercheCategorie),
-        ),
+          cat.toLowerCase().includes(rechercheCategorie)
+        )
+      );
+    }
+
+    // 8) Recherche par feature
+    if (rechercheFeature) {
+      results = results.filter((product) =>
+        product.features_text.toLowerCase().includes(rechercheFeature)
       );
     }
 
     res.json({ produits: results });
+
   } catch (err) {
-    console.error("Erreur :", err.response?.data || err.message);
-    res.status(500).json({ erreur: "Erreur serveur" });
+    console.error('Erreur :', err.response?.data || err.message);
+    res.status(500).json({ erreur: 'Erreur serveur' });
   }
 });
 
 // Page d'accueil
-app.get("/", async (req, res) => {
+app.get('/', async (req, res) => {
   res.send(`
     <!DOCTYPE html>
     <html lang="fr">
@@ -177,7 +225,7 @@ app.get("/", async (req, res) => {
 
         .filters input {
           padding: 12px 20px;
-          width: 320px;
+          width: 280px;
           border: 2px solid #ddd;
           border-radius: 25px;
           font-size: 16px;
@@ -190,7 +238,7 @@ app.get("/", async (req, res) => {
 
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
           gap: 20px;
         }
 
@@ -206,17 +254,17 @@ app.get("/", async (req, res) => {
 
         .card img {
           width: 100%;
-          height: 200px;
+          height: 220px;
           object-fit: cover;
         }
 
         .card-body { padding: 15px; }
 
         .card-body h3 {
-          font-size: 14px;
+          font-size: 15px;
           color: #333;
           margin-bottom: 8px;
-          min-height: 36px;
+          min-height: 42px;
         }
 
         .prix {
@@ -244,11 +292,20 @@ app.get("/", async (req, res) => {
           color: #c62828;
         }
 
-        .categories {
+        .categories, .features {
           margin-top: 10px;
           font-size: 12px;
           color: #666;
           line-height: 1.5;
+        }
+
+        .features ul {
+          margin-top: 6px;
+          padding-left: 18px;
+        }
+
+        .features li {
+          margin-bottom: 4px;
         }
 
         .btn {
@@ -279,6 +336,7 @@ app.get("/", async (req, res) => {
       <div class="filters">
         <input type="text" id="searchName" placeholder="Rechercher un produit...">
         <input type="text" id="searchCategory" placeholder="Rechercher par catégorie...">
+        <input type="text" id="searchFeature" placeholder="Rechercher par caractéristique...">
       </div>
 
       <p id="count"></p>
@@ -287,11 +345,12 @@ app.get("/", async (req, res) => {
       <script>
         let timer;
 
-        async function loadProducts(nom = '', categorie = '') {
+        async function loadProducts(nom = '', categorie = '', feature = '') {
           const params = new URLSearchParams();
 
           if (nom) params.append('nom', nom);
           if (categorie) params.append('categorie', categorie);
+          if (feature) params.append('feature', feature);
 
           const url = params.toString() ? '/produits?' + params.toString() : '/produits';
 
@@ -305,32 +364,44 @@ app.get("/", async (req, res) => {
           const count = document.getElementById('count');
           count.textContent = products.length + ' produit(s) trouvé(s)';
 
-          grid.innerHTML = products.map(p => \`
-            <div class="card">
-              <img src="\${p.image}" alt="\${p.nom}" onerror="this.src='https://via.placeholder.com/220x200?text=Image+indisponible'">
-              <div class="card-body">
-                <h3>\${p.nom}</h3>
-                <div class="prix">\${p.prix}</div>
-                <span class="stock \${p.stock === 'En stock' ? 'dispo' : 'rupture'}">\${p.stock}</span>
-                <div class="categories"><strong>Catégories :</strong> \${(p.categories || []).join(', ')}</div>
-                <a class="btn" href="\${p.lien}" target="_blank">Voir le produit</a>
+          grid.innerHTML = products.map(p => {
+            const featuresHtml = Object.entries(p.features || {})
+              .map(([key, value]) => \`<li><strong>\${key} :</strong> \${value}</li>\`)
+              .join('');
+
+            return \`
+              <div class="card">
+                <img src="\${p.image}" alt="\${p.nom}" onerror="this.src='https://via.placeholder.com/220x200?text=Image+indisponible'">
+                <div class="card-body">
+                  <h3>\${p.nom}</h3>
+                  <div class="prix">\${p.prix}</div>
+                  <span class="stock \${p.stock === 'En stock' ? 'dispo' : 'rupture'}">\${p.stock}</span>
+                  <div class="categories"><strong>Catégories :</strong> \${(p.categories || []).join(', ')}</div>
+                  <div class="features">
+                    <strong>Caractéristiques :</strong>
+                    <ul>\${featuresHtml || '<li>Aucune caractéristique</li>'}</ul>
+                  </div>
+                  <a class="btn" href="\${p.lien}" target="_blank" rel="noopener noreferrer">Voir le produit</a>
+                </div>
               </div>
-            </div>
-          \`).join('');
+            \`;
+          }).join('');
         }
 
         function triggerSearch() {
           const nom = document.getElementById('searchName').value.trim();
           const categorie = document.getElementById('searchCategory').value.trim();
+          const feature = document.getElementById('searchFeature').value.trim();
 
           clearTimeout(timer);
           timer = setTimeout(() => {
-            loadProducts(nom, categorie);
+            loadProducts(nom, categorie, feature);
           }, 300);
         }
 
         document.getElementById('searchName').addEventListener('input', triggerSearch);
         document.getElementById('searchCategory').addEventListener('input', triggerSearch);
+        document.getElementById('searchFeature').addEventListener('input', triggerSearch);
 
         loadProducts();
       </script>
