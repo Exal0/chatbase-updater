@@ -1,59 +1,62 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // CONFIG
-const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
-const SHOP_URL = 'https://www.exalto-professional-shop.com';
+const API_KEY = "7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3";
+const SHOP_URL = "https://www.exalto-professional-shop.com";
 
 // Config axios
 const api = axios.create({
   baseURL: `${SHOP_URL}/api`,
-  auth: { username: API_KEY, password: '' },
-  params: { output_format: 'JSON' }
+  auth: { username: API_KEY, password: "" },
+  params: { output_format: "JSON" },
 });
 
 // Utilitaire pour nettoyer le HTML
-function stripHtml(str = '') {
-  return String(str).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+function stripHtml(str = "") {
+  return String(str)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 // Utilitaire pour lire les champs multilangues PrestaShop
 function getLangValue(field) {
-  if (!field) return '';
-  if (Array.isArray(field)) return field[0]?.value || '';
-  if (typeof field === 'object' && field.value) return field.value;
-  if (typeof field === 'string') return field;
-  return '';
+  if (!field) return "";
+  if (Array.isArray(field)) return field[0]?.value || "";
+  if (typeof field === "object" && field.value) return field.value;
+  if (typeof field === "string") return field;
+  return "";
 }
 
 // Route que Chatbase va appeler
-app.get('/produits', async (req, res) => {
+app.get("/produits", async (req, res) => {
   try {
-    const rechercheNom = (req.query.nom || '').toLowerCase().trim();
-    const rechercheCategorie = (req.query.categorie || '').toLowerCase().trim();
+    const rechercheNom = (req.query.nom || "").toLowerCase().trim();
+    const rechercheCategorie = (req.query.categorie || "").toLowerCase().trim();
 
     // 1) Récupère tous les produits actifs avec associations
-    const prodRes = await api.get('/products', {
+    const prodRes = await api.get("/products", {
       params: {
-        output_format: 'JSON',
-        display: 'full',
-        'filter[active]': '[1]'
-      }
+        output_format: "JSON",
+        display: "full",
+        "filter[active]": "[1]",
+      },
     });
 
     let products = prodRes.data.products || [];
 
     // 2) Récupère toutes les catégories pour afficher leurs noms
-    const categoriesRes = await api.get('/categories', {
+    const categoriesRes = await api.get("/categories", {
       params: {
-        output_format: 'JSON',
-        display: '[id,name]'
-      }
+        output_format: "JSON",
+        display: "[id,name]",
+      },
     });
 
     const categoriesList = categoriesRes.data.categories || [];
@@ -74,7 +77,7 @@ app.get('/produits', async (req, res) => {
 
         const imageUrl = product.id_default_image
           ? `${SHOP_URL}/${product.id_default_image}-large_default/${id}.jpg`
-          : 'https://via.placeholder.com/220x200?text=Image+indisponible';
+          : "https://via.placeholder.com/220x200?text=Image+indisponible";
 
         const lien = slug
           ? `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`
@@ -86,18 +89,30 @@ app.get('/produits', async (req, res) => {
           .map((cat) => categoriesMap[String(cat.id)] || `Catégorie ${cat.id}`)
           .filter(Boolean);
 
+        //filtre delete categorie
+        const CATEGORIES_A_EXCLURE = ["nîmes", "avignon", "terrade"];
+
+        results = results.filter((product) => {
+          return !(product.categories || []).some((cat) =>
+            CATEGORIES_A_EXCLURE.some((exclue) =>
+              cat.toLowerCase().includes(exclue),
+            ),
+          );
+        });
+
         // Stock
         let qty = 0;
         try {
-          const stockRes = await api.get('/stock_availables', {
+          const stockRes = await api.get("/stock_availables", {
             params: {
-              output_format: 'JSON',
-              display: '[quantity]',
-              'filter[id_product]': `[${id}]`
-            }
+              output_format: "JSON",
+              display: "[quantity]",
+              "filter[id_product]": `[${id}]`,
+            },
           });
 
-          qty = parseInt(stockRes.data.stock_availables?.[0]?.quantity, 10) || 0;
+          qty =
+            parseInt(stockRes.data.stock_availables?.[0]?.quantity, 10) || 0;
         } catch (e) {
           console.error(`Erreur stock produit ${id}:`, e.message);
         }
@@ -105,19 +120,19 @@ app.get('/produits', async (req, res) => {
         return {
           nom,
           prix: `${prix} €`,
-          stock: qty > 0 ? 'En stock' : 'Rupture de stock',
+          stock: qty > 0 ? "En stock" : "Rupture de stock",
           description,
           image: imageUrl,
           lien,
-          categories: categoriesNames
+          categories: categoriesNames,
         };
-      })
+      }),
     );
 
     // 4) Filtre par nom
     if (rechercheNom) {
       results = results.filter((product) =>
-        product.nom.toLowerCase().includes(rechercheNom)
+        product.nom.toLowerCase().includes(rechercheNom),
       );
     }
 
@@ -125,21 +140,20 @@ app.get('/produits', async (req, res) => {
     if (rechercheCategorie) {
       results = results.filter((product) =>
         (product.categories || []).some((cat) =>
-          cat.toLowerCase().includes(rechercheCategorie)
-        )
+          cat.toLowerCase().includes(rechercheCategorie),
+        ),
       );
     }
 
     res.json({ produits: results });
-
   } catch (err) {
-    console.error('Erreur :', err.response?.data || err.message);
-    res.status(500).json({ erreur: 'Erreur serveur' });
+    console.error("Erreur :", err.response?.data || err.message);
+    res.status(500).json({ erreur: "Erreur serveur" });
   }
 });
 
 // Page d'accueil
-app.get('/', async (req, res) => {
+app.get("/", async (req, res) => {
   res.send(`
     <!DOCTYPE html>
     <html lang="fr">
