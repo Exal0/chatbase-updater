@@ -34,7 +34,8 @@ function getLangValue(field) {
 // Route que Chatbase va appeler
 app.get('/produits', async (req, res) => {
   try {
-    const recherche = (req.query.nom || '').toLowerCase().trim();
+    const rechercheNom = (req.query.nom || '').toLowerCase().trim();
+    const rechercheCategorie = (req.query.categorie || '').toLowerCase().trim();
 
     // 1) Récupère tous les produits actifs avec associations
     const prodRes = await api.get('/products', {
@@ -47,15 +48,7 @@ app.get('/produits', async (req, res) => {
 
     let products = prodRes.data.products || [];
 
-    // 2) Filtre par nom si recherche
-    if (recherche) {
-      products = products.filter((p) => {
-        const nom = getLangValue(p.name).toLowerCase();
-        return nom.includes(recherche);
-      });
-    }
-
-    // 3) Récupère toutes les catégories pour pouvoir afficher leurs noms
+    // 2) Récupère toutes les catégories pour afficher leurs noms
     const categoriesRes = await api.get('/categories', {
       params: {
         output_format: 'JSON',
@@ -70,8 +63,8 @@ app.get('/produits', async (req, res) => {
       categoriesMap[String(cat.id)] = getLangValue(cat.name);
     }
 
-    // 4) Construit le résultat
-    const results = await Promise.all(
+    // 3) Construit le résultat enrichi
+    let results = await Promise.all(
       products.map(async (product) => {
         const id = product.id;
         const nom = getLangValue(product.name);
@@ -121,6 +114,22 @@ app.get('/produits', async (req, res) => {
       })
     );
 
+    // 4) Filtre par nom
+    if (rechercheNom) {
+      results = results.filter((product) =>
+        product.nom.toLowerCase().includes(rechercheNom)
+      );
+    }
+
+    // 5) Filtre par catégorie
+    if (rechercheCategorie) {
+      results = results.filter((product) =>
+        (product.categories || []).some((cat) =>
+          cat.toLowerCase().includes(rechercheCategorie)
+        )
+      );
+    }
+
     res.json({ produits: results });
 
   } catch (err) {
@@ -136,27 +145,40 @@ app.get('/', async (req, res) => {
     <html lang="fr">
     <head>
       <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Exalto - Catalogue</title>
       <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; padding: 30px; }
         h1 { text-align: center; margin-bottom: 30px; color: #333; font-size: 28px; }
-        #search {
-          display: block;
-          margin: 0 auto 30px;
+
+        .filters {
+          display: flex;
+          gap: 15px;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-bottom: 30px;
+        }
+
+        .filters input {
           padding: 12px 20px;
-          width: 400px;
+          width: 320px;
           border: 2px solid #ddd;
           border-radius: 25px;
           font-size: 16px;
           outline: none;
         }
-        #search:focus { border-color: #333; }
+
+        .filters input:focus {
+          border-color: #333;
+        }
+
         .grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
           gap: 20px;
         }
+
         .card {
           background: white;
           border-radius: 12px;
@@ -164,23 +186,30 @@ app.get('/', async (req, res) => {
           box-shadow: 0 2px 8px rgba(0,0,0,0.08);
           transition: transform 0.2s;
         }
+
         .card:hover { transform: translateY(-4px); }
+
         .card img {
           width: 100%;
           height: 200px;
           object-fit: cover;
         }
+
         .card-body { padding: 15px; }
+
         .card-body h3 {
           font-size: 14px;
           color: #333;
           margin-bottom: 8px;
+          min-height: 36px;
         }
+
         .prix {
           font-weight: bold;
           color: #222;
           font-size: 16px;
         }
+
         .stock {
           display: inline-block;
           margin-top: 8px;
@@ -189,20 +218,24 @@ app.get('/', async (req, res) => {
           font-size: 12px;
           font-weight: bold;
         }
+
         .stock.dispo {
           background: #e6f4ea;
           color: #2e7d32;
         }
+
         .stock.rupture {
           background: #fce8e6;
           color: #c62828;
         }
+
         .categories {
           margin-top: 10px;
           font-size: 12px;
           color: #666;
-          line-height: 1.4;
+          line-height: 1.5;
         }
+
         .btn {
           display: block;
           margin-top: 12px;
@@ -214,7 +247,9 @@ app.get('/', async (req, res) => {
           text-decoration: none;
           font-size: 13px;
         }
+
         .btn:hover { background: #555; }
+
         #count {
           text-align: center;
           color: #888;
@@ -225,19 +260,29 @@ app.get('/', async (req, res) => {
     </head>
     <body>
       <h1>🗂️ Catalogue Exalto</h1>
-      <input type="text" id="search" placeholder="Rechercher un produit...">
+
+      <div class="filters">
+        <input type="text" id="searchName" placeholder="Rechercher un produit...">
+        <input type="text" id="searchCategory" placeholder="Rechercher par catégorie...">
+      </div>
+
       <p id="count"></p>
       <div class="grid" id="grid"></div>
 
       <script>
-        let allProducts = [];
+        let timer;
 
-        async function loadProducts(nom = '') {
-          const url = nom ? '/produits?nom=' + encodeURIComponent(nom) : '/produits';
+        async function loadProducts(nom = '', categorie = '') {
+          const params = new URLSearchParams();
+
+          if (nom) params.append('nom', nom);
+          if (categorie) params.append('categorie', categorie);
+
+          const url = params.toString() ? '/produits?' + params.toString() : '/produits';
+
           const res = await fetch(url);
           const data = await res.json();
-          allProducts = data.produits || [];
-          render(allProducts);
+          render(data.produits || []);
         }
 
         function render(products) {
@@ -259,11 +304,18 @@ app.get('/', async (req, res) => {
           \`).join('');
         }
 
-        let timer;
-        document.getElementById('search').addEventListener('input', (e) => {
+        function triggerSearch() {
+          const nom = document.getElementById('searchName').value.trim();
+          const categorie = document.getElementById('searchCategory').value.trim();
+
           clearTimeout(timer);
-          timer = setTimeout(() => loadProducts(e.target.value), 400);
-        });
+          timer = setTimeout(() => {
+            loadProducts(nom, categorie);
+          }, 300);
+        }
+
+        document.getElementById('searchName').addEventListener('input', triggerSearch);
+        document.getElementById('searchCategory').addEventListener('input', triggerSearch);
 
         loadProducts();
       </script>
