@@ -31,12 +31,44 @@ function getLangValue(field) {
   return '';
 }
 
+// Normalisation texte : minuscule + suppression accents + trim
+function normalizeText(str = '') {
+  return String(str)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Découpe une recherche en mots
+function splitSearchWords(str = '') {
+  return normalizeText(str)
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+// Vérifie que tous les mots recherchés sont présents quelque part
+function matchesAllWords(search, ...fields) {
+  const words = splitSearchWords(search);
+  if (!words.length) return true;
+
+  const haystack = normalizeText(
+    fields
+      .flat()
+      .filter(Boolean)
+      .join(' ')
+  );
+
+  return words.every(word => haystack.includes(word));
+}
+
 // Route API
 app.get('/produits', async (req, res) => {
   try {
-    const rechercheNom = (req.query.nom || '').toLowerCase().trim();
-    const rechercheCategorie = (req.query.categorie || '').toLowerCase().trim();
-    const rechercheFeature = (req.query.feature || '').toLowerCase().trim();
+    const rechercheNom = (req.query.nom || '').trim();
+    const rechercheCategorie = (req.query.categorie || '').trim();
+    const rechercheFeature = (req.query.feature || '').trim();
 
     // 1) Produits actifs avec associations
     const prodRes = await api.get('/products', {
@@ -136,7 +168,12 @@ app.get('/produits', async (req, res) => {
           }
         }
 
-        const featuresText = Object.entries(features)
+        const featureEntries = Object.entries(features);
+
+        const featureNames = featureEntries.map(([key]) => key);
+        const featureValues = featureEntries.map(([, value]) => value);
+
+        const featuresText = featureEntries
           .map(([key, value]) => `${key}: ${value}`)
           .join(' | ');
 
@@ -165,6 +202,8 @@ app.get('/produits', async (req, res) => {
           lien,
           categories: categoriesNames,
           features,
+          feature_names: featureNames,
+          feature_values: featureValues,
           features_text: featuresText
         };
       })
@@ -173,23 +212,36 @@ app.get('/produits', async (req, res) => {
     // 6) Recherche par nom
     if (rechercheNom) {
       results = results.filter((product) =>
-        product.nom.toLowerCase().includes(rechercheNom)
+        matchesAllWords(
+          rechercheNom,
+          product.nom,
+          product.description
+        )
       );
     }
 
     // 7) Recherche par catégorie
     if (rechercheCategorie) {
       results = results.filter((product) =>
-        (product.categories || []).some((cat) =>
-          cat.toLowerCase().includes(rechercheCategorie)
+        matchesAllWords(
+          rechercheCategorie,
+          product.categories
         )
       );
     }
 
-    // 8) Recherche par feature
+    // 8) Recherche large par caractéristique
     if (rechercheFeature) {
       results = results.filter((product) =>
-        product.features_text.toLowerCase().includes(rechercheFeature)
+        matchesAllWords(
+          rechercheFeature,
+          product.feature_names,
+          product.feature_values,
+          product.features_text,
+          product.categories,
+          product.nom,
+          product.description
+        )
       );
     }
 
