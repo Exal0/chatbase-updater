@@ -10,21 +10,48 @@ app.use(express.json());
 const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
 const SHOP_URL = 'https://www.exalto-professional-shop.com';
 const CATEGORIES_AUTORISEES = [4, 5, 6, 7, 11, 12, 13];
+const NOMS_CATEGORIES = {
+  4: 'Têtes malléables femme',
+  5: 'Têtes malléables homme',
+  6: 'Têtes chignon',
+  7: 'Modèles',
+  11: 'Trépieds',
+  12: 'Étau',
+  13: 'Mèches & bustes'
+};
 
 const api = axios.create({
   baseURL: `${SHOP_URL}/api`,
   auth: { username: API_KEY, password: '' }
 });
 
+// Récupère tous les noms de catégories depuis l'API
+async function getAllCategories() {
+  const res = await api.get('/categories', {
+    params: {
+      output_format: 'JSON',
+      display: '[id,name]'
+    }
+  });
+  const map = {};
+  for (const cat of res.data.categories) {
+    map[Number(cat.id)] = cat.name?.[0]?.value || '';
+  }
+  return map;
+}
+
 app.get('/produits', async (req, res) => {
   try {
     const recherche = req.query.nom?.toLowerCase() || '';
+
+    // Récupère tous les noms de catégories
+    const allCategories = await getAllCategories();
 
     // Récupère les produits
     const prodRes = await api.get('/products', {
       params: {
         output_format: 'JSON',
-        display: '[id,name,price,description_short,description,active,id_default_image,link_rewrite,id_category_default]',
+        display: '[id,name,price,description_short,description,active,id_default_image,link_rewrite,id_category_default,associations]',
         'filter[active]': 1
       }
     });
@@ -32,7 +59,7 @@ app.get('/produits', async (req, res) => {
     let products = prodRes.data.products;
     console.log('TOTAL PRODUITS:', products.length);
 
-    // Filtre par catégories
+    // Filtre par catégories autorisées
     products = products.filter(p =>
       CATEGORIES_AUTORISEES.includes(Number(p.id_category_default))
     );
@@ -43,11 +70,19 @@ app.get('/produits', async (req, res) => {
       const mots = recherche.split(' ').filter(m => m.length > 2);
       console.log('MOTS RECHERCHÉS:', mots);
       products = products.filter(p => {
+        // Récupère tous les noms de catégories associées
+        const catsAssociees = p.associations?.categories?.map(c =>
+          allCategories[Number(c.id)] || ''
+        ).join(' ') || '';
+
         const texte = [
           p.name?.[0]?.value || '',
           p.description_short?.[0]?.value || '',
-          p.description?.[0]?.value || ''
+          p.description?.[0]?.value || '',
+          NOMS_CATEGORIES[Number(p.id_category_default)] || '',
+          catsAssociees
         ].join(' ').toLowerCase();
+
         return mots.some(mot => texte.includes(mot));
       });
       console.log('APRÈS FILTRE RECHERCHE:', products.length);
@@ -64,6 +99,12 @@ app.get('/produits', async (req, res) => {
         product.description?.[0]?.value?.replace(/<[^>]*>/g, '').trim() || '';
       const image = `${SHOP_URL}/${product.id_default_image}-large_default/${id}.jpg`;
       const lien = `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`;
+      const categorie = NOMS_CATEGORIES[Number(product.id_category_default)] || 'Autre';
+
+      // Catégories associées
+      const catsAssociees = product.associations?.categories
+        ?.map(c => allCategories[Number(c.id)])
+        .filter(Boolean) || [];
 
       // Stock
       const stockRes = await api.get('/stock_availables', {
@@ -77,6 +118,8 @@ app.get('/produits', async (req, res) => {
 
       return {
         nom,
+        categorie,
+        categories_associees: catsAssociees,
         prix: `${prix} €`,
         stock: qty > 0 ? 'En stock' : 'Rupture de stock',
         description,
@@ -111,7 +154,10 @@ app.get('/', async (req, res) => {
         .card:hover { transform: translateY(-4px); }
         .card img { width: 100%; height: 200px; object-fit: cover; }
         .card-body { padding: 15px; }
-        .card-body h3 { font-size: 14px; color: #333; margin-bottom: 8px; }
+        .card-body h3 { font-size: 14px; color: #333; margin-bottom: 6px; }
+        .categorie { font-size: 11px; color: #888; margin-bottom: 4px; text-transform: uppercase; }
+        .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+        .tag { background: #f0f0f0; color: #555; font-size: 10px; padding: 2px 8px; border-radius: 10px; }
         .prix { font-weight: bold; color: #222; font-size: 16px; }
         .stock { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
         .stock.dispo { background: #e6f4ea; color: #2e7d32; }
@@ -143,7 +189,11 @@ app.get('/', async (req, res) => {
             <div class="card">
               <img src="\${p.image}" alt="\${p.nom}" onerror="this.src='https://via.placeholder.com/220x200?text=Image+indisponible'">
               <div class="card-body">
+                <p class="categorie">\${p.categorie}</p>
                 <h3>\${p.nom}</h3>
+                <div class="tags">
+                  \${(p.categories_associees || []).map(c => \`<span class="tag">\${c}</span>\`).join('')}
+                </div>
                 <div class="prix">\${p.prix}</div>
                 <span class="stock \${p.stock === 'En stock' ? 'dispo' : 'rupture'}">\${p.stock}</span>
                 <a class="btn" href="\${p.lien}" target="_blank">Voir le produit</a>
