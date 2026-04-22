@@ -165,5 +165,5 @@ app.get('/', async (req, res) => {
 
 app.listen(PORT, () => {
 console.log(`✅ Serveur démarré sur http://localhost:${PORT}`);
-console.log(`📦 Route disponible : http://localhost:${PORT}/produits`);
+console.log(`📦 Route disponible : http://localhost:${PORT}/produits`)
 })
