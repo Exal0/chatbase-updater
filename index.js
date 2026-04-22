@@ -89,16 +89,6 @@ app.get("/produits", async (req, res) => {
           .map((cat) => categoriesMap[String(cat.id)] || `Catégorie ${cat.id}`)
           .filter(Boolean);
 
-        //filtre delete categorie
-        const CATEGORIES_A_EXCLURE = ["nîmes", "avignon", "terrade"];
-
-        results = results.filter((product) => {
-          return !(product.categories || []).some((cat) =>
-            CATEGORIES_A_EXCLURE.some((exclue) =>
-              cat.toLowerCase().includes(exclue),
-            ),
-          );
-        });
 
         // Stock
         let qty = 0;
@@ -128,6 +118,17 @@ app.get("/produits", async (req, res) => {
         };
       }),
     );
+
+       //filtre delete categorie
+        const CATEGORIES_A_EXCLURE = ["nîmes", "avignon", "terrade"];
+
+        results = results.filter((product) => {
+          return !(product.categories || []).some((cat) =>
+            CATEGORIES_A_EXCLURE.some((exclue) =>
+              cat.toLowerCase().includes(exclue),
+            ),
+          );
+        });
 
     // 4) Filtre par nom
     if (rechercheNom) {
