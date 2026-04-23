@@ -9,6 +9,7 @@ app.use(express.json());
 // CONFIG
 const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
 const SHOP_URL = 'https://www.exalto-professional-shop.com';
+const EXCLUDED_CATEGORIES = ['avignon', 'nimes', 'terrade'];
 
 // Config axios
 const api = axios.create({
@@ -61,6 +62,16 @@ function matchesAllWords(search, ...fields) {
   );
 
   return words.every(word => haystack.includes(word));
+}
+
+// Vérifie si une catégorie doit être exclue
+function hasExcludedCategory(categories = []) {
+  return categories.some(category => {
+    const normalizedCategory = normalizeText(category);
+    return EXCLUDED_CATEGORIES.some(excluded =>
+      normalizedCategory.includes(excluded)
+    );
+  });
 }
 
 // Route API
@@ -169,7 +180,6 @@ app.get('/produits', async (req, res) => {
         }
 
         const featureEntries = Object.entries(features);
-
         const featureNames = featureEntries.map(([key]) => key);
         const featureValues = featureEntries.map(([, value]) => value);
 
@@ -209,7 +219,10 @@ app.get('/produits', async (req, res) => {
       })
     );
 
-    // 6) Recherche par nom
+    // 6) Exclusion des catégories Avignon / Nîmes / TERRADE
+    results = results.filter(product => !hasExcludedCategory(product.categories));
+
+    // 7) Recherche par nom
     if (rechercheNom) {
       results = results.filter((product) =>
         matchesAllWords(
@@ -220,7 +233,7 @@ app.get('/produits', async (req, res) => {
       );
     }
 
-    // 7) Recherche par catégorie
+    // 8) Recherche par catégorie
     if (rechercheCategorie) {
       results = results.filter((product) =>
         matchesAllWords(
@@ -230,7 +243,7 @@ app.get('/produits', async (req, res) => {
       );
     }
 
-    // 8) Recherche large par caractéristique
+    // 9) Recherche large par caractéristique
     if (rechercheFeature) {
       results = results.filter((product) =>
         matchesAllWords(
