@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 // CONFIG
-const API_KEY = process.env.PRESTASHOP_API_KEY || 'REMPLACE_PAR_TA_CLE_API';
+const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
 const SHOP_URL = 'https://www.exalto-professional-shop.com';
 const EXCLUDED_CATEGORIES = ['avignon', 'nimes', 'terrade'];
 
@@ -17,7 +17,6 @@ const api = axios.create({
   params: { output_format: 'JSON' }
 });
 
-// Nettoie HTML
 function stripHtml(str = '') {
   return String(str)
     .replace(/<[^>]*>/g, ' ')
@@ -25,7 +24,6 @@ function stripHtml(str = '') {
     .trim();
 }
 
-// Champs multilangues PrestaShop
 function getLangValue(field) {
   if (!field) return '';
   if (Array.isArray(field)) return field[0]?.value || '';
@@ -34,7 +32,6 @@ function getLangValue(field) {
   return '';
 }
 
-// Normalisation
 function normalizeText(str = '') {
   return String(str)
     .toLowerCase()
@@ -44,19 +41,58 @@ function normalizeText(str = '') {
     .trim();
 }
 
-function splitSearchWords(str = '') {
-  return normalizeText(str).split(/\s+/).filter(Boolean);
+const SYNONYMS = {
+  blonde: ['blonde', 'blond', 'clair', 'claire'],
+  blond: ['blond', 'blonde', 'clair', 'claire'],
+  brune: ['brune', 'brun', 'marron', 'chatain'],
+  brun: ['brun', 'brune', 'marron', 'chatain'],
+  châtain: ['chatain', 'châtain', 'brun', 'marron'],
+  chatain: ['chatain', 'châtain', 'brun', 'marron'],
+
+  coloration: ['coloration', 'couleur', 'teinture'],
+  couleur: ['couleur', 'coloration', 'teinture'],
+  teinture: ['teinture', 'coloration', 'couleur'],
+  decoloration: ['decoloration', 'décoloration', 'coloration', 'couleur'],
+  décoloration: ['decoloration', 'décoloration', 'coloration', 'couleur'],
+
+  long: ['long', 'longue'],
+  longue: ['longue', 'long'],
+  court: ['court', 'courte'],
+  courte: ['courte', 'court'],
+
+  humain: ['humain', 'humains', 'naturel', 'naturels', 'indiens', 'indien'],
+  humains: ['humain', 'humains', 'naturel', 'naturels', 'indiens', 'indien'],
+  naturel: ['naturel', 'naturels', 'humain', 'humains'],
+  naturels: ['naturel', 'naturels', 'humain', 'humains'],
+
+  chignon: ['chignon', 'attache', 'coiffage'],
+  coupe: ['coupe', 'couper', 'coiffure'],
+  coiffure: ['coiffure', 'coiffage', 'coupe']
+};
+
+function getSearchWords(query = '') {
+  return normalizeText(query)
+    .split(/\s+/)
+    .filter(Boolean);
 }
 
-function matchesAllWords(search, ...fields) {
-  const words = splitSearchWords(search);
+function wordMatches(word, haystack) {
+  const variants = SYNONYMS[word] || [word];
+  return variants.some(variant => haystack.includes(normalizeText(variant)));
+}
+
+function matchesQuery(query, ...fields) {
+  const words = getSearchWords(query);
   if (!words.length) return true;
 
   const haystack = normalizeText(
-    fields.flat(Infinity).filter(Boolean).join(' ')
+    fields
+      .flat(Infinity)
+      .filter(Boolean)
+      .join(' ')
   );
 
-  return words.every(word => haystack.includes(word));
+  return words.every(word => wordMatches(word, haystack));
 }
 
 function hasExcludedCategory(categories = []) {
@@ -66,6 +102,10 @@ function hasExcludedCategory(categories = []) {
       normalizedCategory.includes(excluded)
     );
   });
+}
+
+function cleanFeatureValue(value = '') {
+  return String(value).replace(/\s+/g, ' ').trim();
 }
 
 function buildShortDescription(features = {}) {
@@ -82,8 +122,35 @@ function buildShortDescription(features = {}) {
     : 'Tête malléable professionnelle.';
 }
 
-function cleanFeatureValue(value = '') {
-  return String(value).replace(/\s+/g, ' ').trim();
+function scoreProduct(product, query = '') {
+  const words = getSearchWords(query);
+  if (!words.length) return 0;
+
+  const name = normalizeText(product.name);
+  const description = normalizeText(product.description);
+  const tags = normalizeText((product.tags || []).join(' '));
+  const categories = normalizeText((product.categories || []).join(' '));
+  const features = normalizeText(Object.values(product.features || {}).join(' '));
+
+  let score = 0;
+
+  for (const word of words) {
+    const variants = SYNONYMS[word] || [word];
+
+    for (const variantRaw of variants) {
+      const variant = normalizeText(variantRaw);
+
+      if (name.includes(variant)) score += 5;
+      if (features.includes(variant)) score += 4;
+      if (tags.includes(variant)) score += 3;
+      if (description.includes(variant)) score += 2;
+      if (categories.includes(variant)) score += 1;
+    }
+  }
+
+  if (product.stock === 'En stock') score += 1;
+
+  return score;
 }
 
 function toChatbaseProduct(product) {
@@ -121,10 +188,10 @@ function toChatbaseProduct(product) {
   };
 }
 
-// Route principale Chatbase
 app.get('/produits', async (req, res) => {
   try {
     const query = (req.query.query || '').trim();
+    const limit = Math.min(parseInt(req.query.limit, 10) || 5, 20);
 
     const prodRes = await api.get('/products', {
       params: {
@@ -191,15 +258,13 @@ app.get('/produits', async (req, res) => {
           ? `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`
           : SHOP_URL;
 
-        const productCategories = product.associations?.categories || [];
-        const categories = productCategories
+        const categories = (product.associations?.categories || [])
           .map(cat => categoriesMap[String(cat.id)] || '')
           .filter(Boolean);
 
-        const productFeatures = product.associations?.product_features || [];
         const features = {};
 
-        for (const pf of productFeatures) {
+        for (const pf of product.associations?.product_features || []) {
           const featureId = String(pf.id);
           const featureValueId = String(pf.id_feature_value);
 
@@ -245,19 +310,25 @@ app.get('/produits', async (req, res) => {
     let chatbaseResults = results.map(toChatbaseProduct);
 
     if (query) {
-      chatbaseResults = chatbaseResults.filter(product =>
-        matchesAllWords(
-          query,
-          product.name,
-          product.description,
-          product.categories,
-          product.tags,
-          Object.values(product.features || {})
+      chatbaseResults = chatbaseResults
+        .filter(product =>
+          matchesQuery(
+            query,
+            product.name,
+            product.description,
+            product.categories,
+            product.tags,
+            Object.values(product.features || {})
+          )
         )
-      );
+        .map(product => ({
+          ...product,
+          score: scoreProduct(product, query)
+        }))
+        .sort((a, b) => b.score - a.score);
     }
 
-    chatbaseResults = chatbaseResults.slice(0, 5);
+    chatbaseResults = chatbaseResults.slice(0, limit);
 
     res.json({
       query,
@@ -266,15 +337,16 @@ app.get('/produits', async (req, res) => {
     });
 
   } catch (err) {
-    console.error('Erreur :', err.response?.data || err.message);
+    console.error('Erreur complète :', err.response?.data || err.message);
+
     res.status(500).json({
       error: true,
-      message: 'Erreur serveur pendant la recherche produits.'
+      message: 'Erreur serveur pendant la recherche produits.',
+      details: err.response?.data || err.message
     });
   }
 });
 
-// Page test navigateur
 app.get('/', async (req, res) => {
   res.send(`
     <!DOCTYPE html>
@@ -310,7 +382,10 @@ app.get('/', async (req, res) => {
         let timer;
 
         async function loadProducts(query = '') {
-          const url = query ? '/produits?query=' + encodeURIComponent(query) : '/produits';
+          const url = query
+            ? '/produits?query=' + encodeURIComponent(query) + '&limit=20'
+            : '/produits?limit=20';
+
           const res = await fetch(url);
           const data = await res.json();
           render(data.results || []);
@@ -347,6 +422,6 @@ app.get('/', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(\`Serveur démarré sur http://localhost:\${PORT}\`);
-  console.log(\`Route Chatbase : http://localhost:\${PORT}/produits?query=blonde\`);
+  console.log(`Serveur démarré sur http://localhost:${PORT}`);
+  console.log(`Route Chatbase : http://localhost:${PORT}/produits?query=blonde`);
 });
