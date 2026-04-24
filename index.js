@@ -41,16 +41,34 @@ function normalizeText(str = '') {
 function splitSearchWords(str = '') {
   return normalizeText(str).split(/\s+/).filter(Boolean);
 }
-
 function matchesAllWords(search, ...fields) {
   const words = splitSearchWords(search);
   if (!words.length) return true;
 
   const haystack = normalizeText(
-    fields.flat().filter(Boolean).join(' ')
+    fields
+      .flat()
+      .filter(Boolean)
+      .join(' ')
   );
 
-  return words.every(word => haystack.includes(word));
+  const synonyms = {
+    blonde: ['blonde', 'blond'],
+    blond: ['blond', 'blonde'],
+    brune: ['brune', 'brun'],
+    brun: ['brun', 'brune'],
+    coloration: ['coloration', 'couleur', 'décoloration', 'decoloration'],
+    couleur: ['couleur', 'coloration'],
+    long: ['long', 'longue'],
+    longue: ['longue', 'long'],
+    court: ['court', 'courte'],
+    courte: ['courte', 'court']
+  };
+
+  return words.every(word => {
+    const variants = synonyms[word] || [word];
+    return variants.some(variant => haystack.includes(normalizeText(variant)));
+  });
 }
 
 function hasExcludedCategory(categories = []) {
