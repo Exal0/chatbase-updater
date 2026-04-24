@@ -11,19 +11,16 @@ const API_KEY = '7VA33R1WLZPM4Q642HNQ3M62EKFMKSF3';
 const SHOP_URL = 'https://www.exalto-professional-shop.com';
 const EXCLUDED_CATEGORIES = ['avignon', 'nimes', 'terrade'];
 
-// Config axios
 const api = axios.create({
   baseURL: `${SHOP_URL}/api`,
   auth: { username: API_KEY, password: '' },
   params: { output_format: 'JSON' }
 });
 
-// Utilitaire pour nettoyer le HTML
 function stripHtml(str = '') {
   return String(str).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-// Utilitaire pour lire les champs multilangues PrestaShop
 function getLangValue(field) {
   if (!field) return '';
   if (Array.isArray(field)) return field[0]?.value || '';
@@ -32,7 +29,6 @@ function getLangValue(field) {
   return '';
 }
 
-// Normalisation texte : minuscule + suppression accents + trim
 function normalizeText(str = '') {
   return String(str)
     .toLowerCase()
@@ -42,29 +38,21 @@ function normalizeText(str = '') {
     .trim();
 }
 
-// Découpe une recherche en mots
 function splitSearchWords(str = '') {
-  return normalizeText(str)
-    .split(/\s+/)
-    .filter(Boolean);
+  return normalizeText(str).split(/\s+/).filter(Boolean);
 }
 
-// Vérifie que tous les mots recherchés sont présents quelque part
 function matchesAllWords(search, ...fields) {
   const words = splitSearchWords(search);
   if (!words.length) return true;
 
   const haystack = normalizeText(
-    fields
-      .flat()
-      .filter(Boolean)
-      .join(' ')
+    fields.flat().filter(Boolean).join(' ')
   );
 
   return words.every(word => haystack.includes(word));
 }
 
-// Vérifie si une catégorie doit être exclue
 function hasExcludedCategory(categories = []) {
   return categories.some(category => {
     const normalizedCategory = normalizeText(category);
@@ -74,14 +62,16 @@ function hasExcludedCategory(categories = []) {
   });
 }
 
-// Route API
 app.get('/produits', async (req, res) => {
   try {
     const rechercheNom = (req.query.nom || '').trim();
     const rechercheCategorie = (req.query.categorie || '').trim();
     const rechercheFeature = (req.query.feature || '').trim();
 
-    // 1) Produits actifs avec associations
+    // ✅ Nouveau pour Chatbase
+    const rechercheQuery = (req.query.query || '').trim();
+    const limit = Math.min(parseInt(req.query.limit, 10) || 5, 20);
+
     const prodRes = await api.get('/products', {
       params: {
         output_format: 'JSON',
@@ -92,7 +82,6 @@ app.get('/produits', async (req, res) => {
 
     let products = prodRes.data.products || [];
 
-    // 2) Catégories
     const categoriesRes = await api.get('/categories', {
       params: {
         output_format: 'JSON',
@@ -107,7 +96,6 @@ app.get('/produits', async (req, res) => {
       categoriesMap[String(cat.id)] = getLangValue(cat.name);
     }
 
-    // 3) Features
     const featuresRes = await api.get('/product_features', {
       params: {
         output_format: 'JSON',
@@ -122,7 +110,6 @@ app.get('/produits', async (req, res) => {
       featuresMap[String(feature.id)] = getLangValue(feature.name);
     }
 
-    // 4) Valeurs des features
     const featureValuesRes = await api.get('/product_feature_values', {
       params: {
         output_format: 'JSON',
@@ -140,7 +127,6 @@ app.get('/produits', async (req, res) => {
       };
     }
 
-    // 5) Construction des résultats
     let results = await Promise.all(
       products.map(async (product) => {
         const id = product.id;
@@ -157,13 +143,11 @@ app.get('/produits', async (req, res) => {
           ? `${SHOP_URL}/fr/nos-modeles/${id}-${slug}.html`
           : SHOP_URL;
 
-        // Catégories du produit
         const productCategories = product.associations?.categories || [];
         const categoriesNames = productCategories
           .map((cat) => categoriesMap[String(cat.id)] || `Catégorie ${cat.id}`)
           .filter(Boolean);
 
-        // Features du produit
         const productFeatures = product.associations?.product_features || [];
         const features = {};
 
@@ -187,7 +171,6 @@ app.get('/produits', async (req, res) => {
           .map(([key, value]) => `${key}: ${value}`)
           .join(' | ');
 
-        // Stock
         let qty = 0;
         try {
           const stockRes = await api.get('/stock_availables', {
@@ -219,10 +202,8 @@ app.get('/produits', async (req, res) => {
       })
     );
 
-    // 6) Exclusion des catégories Avignon / Nîmes / TERRADE
     results = results.filter(product => !hasExcludedCategory(product.categories));
 
-    // 7) Recherche par nom
     if (rechercheNom) {
       results = results.filter((product) =>
         matchesAllWords(
@@ -233,7 +214,6 @@ app.get('/produits', async (req, res) => {
       );
     }
 
-    // 8) Recherche par catégorie
     if (rechercheCategorie) {
       results = results.filter((product) =>
         matchesAllWords(
@@ -243,7 +223,6 @@ app.get('/produits', async (req, res) => {
       );
     }
 
-    // 9) Recherche large par caractéristique
     if (rechercheFeature) {
       results = results.filter((product) =>
         matchesAllWords(
@@ -258,15 +237,54 @@ app.get('/produits', async (req, res) => {
       );
     }
 
-    res.json({ produits: results });
+    // ✅ Nouveau filtre global pour Chatbase : /produits?query=blonde
+    if (rechercheQuery) {
+      results = results.filter((product) =>
+        matchesAllWords(
+          rechercheQuery,
+          product.nom,
+          product.description,
+          product.categories,
+          product.feature_names,
+          product.feature_values,
+          product.features_text
+        )
+      );
+    }
+
+    // ✅ Format propre pour Chatbase
+    const chatbaseResults = results.slice(0, limit).map(product => ({
+      name: product.nom,
+      price: product.prix,
+      stock: product.stock,
+      url: product.lien,
+      image: product.image,
+      description: product.description || product.features_text,
+      categories: product.categories,
+      features: product.features,
+      tags: product.feature_values,
+      cta: 'Voir le produit'
+    }));
+
+    res.json({
+      query: rechercheQuery,
+      count: chatbaseResults.length,
+      results: chatbaseResults,
+
+      // ✅ On garde l’ancien format pour ta page test
+      produits: results
+    });
 
   } catch (err) {
     console.error('Erreur :', err.response?.data || err.message);
-    res.status(500).json({ erreur: 'Erreur serveur' });
+    res.status(500).json({
+      error: true,
+      message: 'Erreur serveur',
+      details: err.response?.data || err.message
+    });
   }
 });
 
-// Page d'accueil
 app.get('/', async (req, res) => {
   res.send(`
     <!DOCTYPE html>
@@ -279,120 +297,25 @@ app.get('/', async (req, res) => {
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; padding: 30px; }
         h1 { text-align: center; margin-bottom: 30px; color: #333; font-size: 28px; }
-
-        .filters {
-          display: flex;
-          gap: 15px;
-          justify-content: center;
-          flex-wrap: wrap;
-          margin-bottom: 30px;
-        }
-
-        .filters input {
-          padding: 12px 20px;
-          width: 280px;
-          border: 2px solid #ddd;
-          border-radius: 25px;
-          font-size: 16px;
-          outline: none;
-        }
-
-        .filters input:focus {
-          border-color: #333;
-        }
-
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-          gap: 20px;
-        }
-
-        .card {
-          background: white;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-          transition: transform 0.2s;
-        }
-
+        .filters { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px; }
+        .filters input { padding: 12px 20px; width: 280px; border: 2px solid #ddd; border-radius: 25px; font-size: 16px; outline: none; }
+        .filters input:focus { border-color: #333; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s; }
         .card:hover { transform: translateY(-4px); }
-
-        .card img {
-          width: 100%;
-          height: 220px;
-          object-fit: cover;
-        }
-
+        .card img { width: 100%; height: 220px; object-fit: cover; }
         .card-body { padding: 15px; }
-
-        .card-body h3 {
-          font-size: 15px;
-          color: #333;
-          margin-bottom: 8px;
-          min-height: 42px;
-        }
-
-        .prix {
-          font-weight: bold;
-          color: #222;
-          font-size: 16px;
-        }
-
-        .stock {
-          display: inline-block;
-          margin-top: 8px;
-          padding: 3px 10px;
-          border-radius: 20px;
-          font-size: 12px;
-          font-weight: bold;
-        }
-
-        .stock.dispo {
-          background: #e6f4ea;
-          color: #2e7d32;
-        }
-
-        .stock.rupture {
-          background: #fce8e6;
-          color: #c62828;
-        }
-
-        .categories, .features {
-          margin-top: 10px;
-          font-size: 12px;
-          color: #666;
-          line-height: 1.5;
-        }
-
-        .features ul {
-          margin-top: 6px;
-          padding-left: 18px;
-        }
-
-        .features li {
-          margin-bottom: 4px;
-        }
-
-        .btn {
-          display: block;
-          margin-top: 12px;
-          text-align: center;
-          padding: 8px;
-          background: #333;
-          color: white;
-          border-radius: 8px;
-          text-decoration: none;
-          font-size: 13px;
-        }
-
+        .card-body h3 { font-size: 15px; color: #333; margin-bottom: 8px; min-height: 42px; }
+        .prix { font-weight: bold; color: #222; font-size: 16px; }
+        .stock { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .stock.dispo { background: #e6f4ea; color: #2e7d32; }
+        .stock.rupture { background: #fce8e6; color: #c62828; }
+        .categories, .features { margin-top: 10px; font-size: 12px; color: #666; line-height: 1.5; }
+        .features ul { margin-top: 6px; padding-left: 18px; }
+        .features li { margin-bottom: 4px; }
+        .btn { display: block; margin-top: 12px; text-align: center; padding: 8px; background: #333; color: white; border-radius: 8px; text-decoration: none; font-size: 13px; }
         .btn:hover { background: #555; }
-
-        #count {
-          text-align: center;
-          color: #888;
-          margin-bottom: 20px;
-          font-size: 14px;
-        }
+        #count { text-align: center; color: #888; margin-bottom: 20px; font-size: 14px; }
       </style>
     </head>
     <body>
@@ -475,9 +398,9 @@ app.get('/', async (req, res) => {
   `);
 });
 
-// Démarre le serveur
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Serveur démarré sur http://localhost:${PORT}`);
-  console.log(`📦 Route disponible : http://localhost:${PORT}/produits`);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Serveur démarré sur le port ${PORT}`);
+  console.log(`📦 Route disponible : /produits`);
 });
